@@ -4,54 +4,58 @@
         <applies_extended>false</applies_extended>
         <condition/>
         <description/>
-        <field>end_date</field>
+        <field>leave_type</field>
         <global>true</global>
         <isolate_script>true</isolate_script>
         <messages/>
-        <name>setDuration</name>
+        <name>Populate Leave Details</name>
         <order/>
         <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
     if (isLoading || newValue === '') {
         return;
     }
-    alert("cs");
-    var start = g_form.getValue('start_date');
+
     //Type appropriate comment here, and begin script below
     var ga = new GlideAjax('lmAjax');
-    ga.addParam('sysparm_name','getDateDiff');
-    ga.addParam('sysparm_start',start);
-    ga.addParam('sysparm_end',newValue);
-    ga.getXML(getDuration);
-    alert(getDuration);
+    alert("Test.....");
+    ga.addParam('sysparm_name', 'getLeaveBucket');
+    ga.addParam('sysparm_user', g_user.userID);
+    alert("user" + g_user.userID);
+    ga.addParam('sysparm_leavetype', newValue);
+    ga.getXML(getBucket);
 
-    function getDuration(response) {
+    alert("new value from populate leave details : " + newValue);
+    //alert("old value from populate leave details : "+oldValue);
+    function getBucket(response) {
+        alert("getBucket fun");
         //var answer = response.responseXML.documentElement.getAttribute("answer");
         var answer = response.responseXML.documentElement.getAttribute("answer");
+        var result = JSON.parse(answer);
+        alert("Answer   : " + answer);
 
-        var days = (answer / (1000 * 60 * 60 * 24));
-         alert(days);
-        var days1 = days + 1;
-        alert(days1);
-        g_form.setValue('duration', days1);
+        g_form.setValue('accrued', result.accrued);
+        alert("accrued  :" + result.accrued);
+        g_form.setValue('balance', result.balance);
+        alert("balance  :" + result.balance);
+        g_form.setValue('taken', result.taken);
+        alert("taken  :" + result.taken);
     }
-
-
 }]]></script>
         <sys_class_name>sys_script_client</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2023-10-31 18:43:56</sys_created_on>
+        <sys_created_on>2023-11-01 04:23:16</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
-        <sys_id>011bcc249752b1106823f5c11153afd8</sys_id>
-        <sys_mod_count>15</sys_mod_count>
-        <sys_name>setDuration</sys_name>
+        <sys_id>10fd466c971ab1106823f5c11153af07</sys_id>
+        <sys_mod_count>28</sys_mod_count>
+        <sys_name>Populate Leave Details</sys_name>
         <sys_overrides/>
         <sys_package display_value="Leave Management" source="x_1129234_lms">27b64184975631106823f5c11153af85</sys_package>
         <sys_policy/>
         <sys_scope display_value="Leave Management">27b64184975631106823f5c11153af85</sys_scope>
-        <sys_update_name>sys_script_client_011bcc249752b1106823f5c11153afd8</sys_update_name>
+        <sys_update_name>sys_script_client_10fd466c971ab1106823f5c11153af07</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-11-01 05:57:02</sys_updated_on>
+        <sys_updated_on>2023-11-01 06:18:32</sys_updated_on>
         <table>x_1129234_lms_leave_request</table>
         <type>onChange</type>
         <ui_type>10</ui_type>
